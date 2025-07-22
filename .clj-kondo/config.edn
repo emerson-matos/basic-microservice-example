@@ -1,0 +1,1 @@
+{:lint-as {basic-microservice-example.aux.init/defflow clojure.test/deftest}}

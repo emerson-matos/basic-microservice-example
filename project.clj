@@ -1,43 +1,55 @@
 (defproject basic-microservice-example "0.0.1-SNAPSHOT"
-  :description "Very simplistic example of how nubank organizes and tests microservices"
-  :url "https://github.com/nubank/basic-microservice-example"
+  :description "Very simplistic example of a clojure microservice"
+  :url "https://github.com/emerson-matos/basic-microservice-example"
   :license {:name "Apache License, Version 2.0"}
-  :repositories [["sonatype" {:url "https://oss.sonatype.org/content/repositories/releases"}]]
-  :plugins [[lein-midje "3.2.1"]
-            [jonase/eastwood "0.3.5"]
-            [lein-ancient "0.6.15"]]
-  :dependencies [[org.clojure/clojure "1.10.1"]
-                 [org.clojure/core.rrb-vector "0.0.14"]
-                 [io.pedestal/pedestal.service "0.5.7"]
-                 [io.pedestal/pedestal.jetty "0.5.7"]
 
-                 [http-kit "2.3.0"]
-                 [com.stuartsierra/component "0.4.0"]
-                 [prismatic/schema "1.1.12"]
-                 [cheshire "5.9.0"]
-                 [io.aviso/pretty "0.1.37"]
+  :plugins [[com.github.clojure-lsp/lein-clojure-lsp "2.0.9"]
+            [lein-ancient "1.0.0-RC3"]]
 
-                 [ch.qos.logback/logback-classic "1.2.3" :exclusions [org.slf4j/slf4j-api]]
-                 [org.slf4j/jul-to-slf4j "1.7.28"]
-                 [org.slf4j/jcl-over-slf4j "1.7.28"]
-                 [org.slf4j/log4j-over-slf4j "1.7.28"]]
-  :min-lein-version "2.0.0"
+  :dependencies [[org.clojure/clojure "1.12.1"]
+                 [io.pedestal/pedestal.service "0.7.2"]
+                 [io.pedestal/pedestal.jetty "0.7.2"]
+                 [io.pedestal/pedestal.error "0.7.2"]
+
+                 [http-kit "2.8.0"]
+                 [com.stuartsierra/component "1.1.0"]
+                 [prismatic/schema "1.4.1"]
+                 [cheshire "6.0.0"]
+                 [io.aviso/pretty "1.4.4"]
+
+                 [ch.qos.logback/logback-classic "1.5.18" :exclusions [org.slf4j/slf4j-api]]
+                 [org.slf4j/jul-to-slf4j "2.0.17"]
+                 [org.slf4j/jcl-over-slf4j "2.0.17"]
+                 [org.slf4j/log4j-over-slf4j "2.0.17"]]
+
+  :min-lein-version "2.4.2"
+
   :resource-paths ["config", "resources"]
-  :aliases {"clj-kondo" ["with-profile" "+clj-kondo" "run" "-m" "clj-kondo.main"]
-            "lint" ["with-profile" "+clj-kondo" "run" "-m" "clj-kondo.main" "--lint" "src" "--lint" "src:test"]
-            "dev" ["with-profile" "+dev" "repl"]}
-  :profiles {:clj-kondo {:dependencies [[clj-kondo "RELEASE"]]}
-             :dev {:aliases { "run-dev" ["trampoline" "run" "-m" "basic-microservice-example.server/run-dev"] }
+
+  :aliases {"clean-ns" ["clojure-lsp" "clean-ns" "--dry"]          ;; check if namespaces are clean
+            "format" ["clojure-lsp" "format" "--dry"]              ;; check if namespaces are formatted
+            "diagnostics" ["clojure-lsp" "diagnostics"]            ;; check if project has any diagnostics (clj-kondo findings)
+            "lint" ["do" ["clean-ns"] ["format"] ["diagnostics"]]  ;; check all above
+
+            "clean-ns-fix" ["clojure-lsp" "clean-ns"]              ;; Fix namespaces not clean
+            "format-fix" ["clojure-lsp" "format"]                  ;; Fix namespaces not formatted
+            "lint-fix" ["do" ["clean-ns-fix"] ["format-fix"]]
+
+            "dev" ["with-profile" "+dev" "repl"]
+            "unit" ["with-profile" "+unit" "test"]
+            "integration" ["with-profile" "+integration" "test"]}
+  :profiles {:integration {:test-paths ^:replace ["test/integration"]}
+             :unit {:test-paths ^:replace ["test/unit"]}
+             :dev {:aliases {"run-dev" ["trampoline" "run" "-m" "basic-microservice-example.server/run-dev"] }
                    :repl-options {:init-ns user}
                    :source-paths ["dev"]
-                   :dependencies [[midje "1.9.9"]
-                                  [nubank/selvage "0.0.1"]
-                                  [nubank/matcher-combinators "1.2.1"]
-                                  [org.clojure/tools.namespace "0.3.1"]
-                                  [org.clojure/java.classpath "0.3.0"]
-                                  [criterium "0.4.5"]
-                                  [cider/orchard "0.5.1"]
-                                  [io.pedestal/pedestal.service-tools "0.5.7"]]}
+                   :dependencies [[nubank/state-flow "5.20.1"]
+                                  [nubank/matcher-combinators "3.9.1"]
+                                  [org.clojure/tools.namespace "1.5.0"]
+                                  [org.clojure/java.classpath "1.1.0"]
+                                  [criterium "0.4.6"]]}
              :uberjar {:aot [basic-microservice-example.server]}}
-  :main ^{:skip-aot true} basic-microservice-example.server)
 
+  :test-paths ["test/unit" "test/integration"]
+
+  :main ^{:skip-aot true} basic-microservice-example.server)
