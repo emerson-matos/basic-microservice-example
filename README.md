@@ -43,27 +43,41 @@ The service exposes endpoints for managing savings accounts:
 - Test helpers and macros are in `test/integration/backend_payment_processor/aux/`.
 - Run all tests with:
   ```
-  lein test
+  clojure -M:test
   ```
   Or run only unit/integration tests:
   ```
-  lein with-profile +unit test
-  lein with-profile +integration test
+  clojure -M:unit
+  clojure -M:integration
   ```
 
 ## Running the Service
 
 - Start the server:
   ```
-  lein run
+  clojure -M:run
   ```
   Visit [localhost:8080](http://localhost:8080/) to see the health check.
 
-- For development:
+- For development with REPL:
   ```
-  lein repl
+  clojure -M:repl
   ;; then in the REPL:
-  (basic-microservice-example.server/run-dev)
+  (require '[basic-microservice-example.components :as components])
+  (components/create-and-start-system!)
+  ```
+
+## Building
+
+- Build an uberjar:
+  ```
+  clojure -T:build uber
+  ```
+  The uberjar will be created in `target/basic-microservice-example-0.0.1-SNAPSHOT-standalone.jar`
+
+- Run the uberjar:
+  ```
+  java -jar target/basic-microservice-example-0.0.1-SNAPSHOT-standalone.jar
   ```
 
 ## Project Structure

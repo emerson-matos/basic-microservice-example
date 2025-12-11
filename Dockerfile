@@ -1,11 +1,11 @@
-FROM clojure:temurin-21-lein-noble AS builder
+FROM clojure:temurin-21-tools-deps-noble AS builder
 
 WORKDIR /app
 
 # Copy project files and download dependencies (for better caching)
-COPY project.clj .
+COPY deps.edn build.clj ./
 RUN mkdir -p src resources config
-RUN lein deps
+RUN clojure -P -T:build
 
 # Copy the rest of the source code
 COPY src ./src
@@ -13,7 +13,7 @@ COPY src ./src
 COPY config ./config
 
 # Build the uberjar
-RUN lein uberjar
+RUN clojure -T:build uber
 
 # --
 # Final image

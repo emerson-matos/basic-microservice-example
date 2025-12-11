@@ -21,6 +21,11 @@ repl-port
 .nrepl-port
 .repl
 
+# deps.edn / Clojure CLI
+.cpcache/
+.nrepl-port
+.rebel_readline_history
+
 # Temp Files
 *.orig
 *~
