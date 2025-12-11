@@ -49,24 +49,21 @@
                       nubank/matcher-combinators {:mvn/version "3.9.1"}
                       io.github.cognitect-labs/test-runner {:git/tag "v0.5.1"
                                                               :git/sha "dfb30dd"}}
-         :main-opts ["-m" "cognitect.test-runner"]
-         :exec-fn cognitect.test-runner.api/test}
+         :main-opts ["-m" "cognitect.test-runner"]}
 
   :unit {:extra-paths ["test/unit"]
          :extra-deps {nubank/state-flow {:mvn/version "5.20.1"}
                       nubank/matcher-combinators {:mvn/version "3.9.1"}
                       io.github.cognitect-labs/test-runner {:git/tag "v0.5.1"
                                                               :git/sha "dfb30dd"}}
-         :main-opts ["-m" "cognitect.test-runner"]
-         :exec-fn cognitect.test-runner.api/test}
+         :main-opts ["-m" "cognitect.test-runner"]}
 
   :integration {:extra-paths ["test/integration"]
                 :extra-deps {nubank/state-flow {:mvn/version "5.20.1"}
                              nubank/matcher-combinators {:mvn/version "3.9.1"}
                              io.github.cognitect-labs/test-runner {:git/tag "v0.5.1"
                                                                      :git/sha "dfb30dd"}}
-                :main-opts ["-m" "cognitect.test-runner"]
-                :exec-fn cognitect.test-runner.api/test}
+                :main-opts ["-m" "cognitect.test-runner"]}
 
   ;; Linting with clojure-lsp
   :clojure-lsp {:extra-deps {com.github.clojure-lsp/clojure-lsp-standalone {:mvn/version "2024.08.05-18.16.00"}}
