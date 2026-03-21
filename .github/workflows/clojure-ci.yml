@@ -22,7 +22,7 @@ jobs:
       - name: Install clojure tools
         uses: DeLaGuardo/setup-clojure@13.4
         with:
-          lein: 2.9.1                  # Leiningen
+          cli: 1.12.0.1479                 # Clojure CLI tools
 
       # Optional step:
       - name: Cache clojure dependencies
@@ -41,10 +41,10 @@ jobs:
           restore-keys: cljdeps-
 
       - name: Lint (clojure-lsp)
-        run: lein lint
+        run: clojure -M:clojure-lsp format --dry && clojure -M:clojure-lsp clean-ns --dry && clojure -M:clojure-lsp diagnostics
 
       - name: Run unit tests
-        run: lein unit
+        run: clojure -M:unit
 
       - name: Run integration tests
-        run: lein integration 
+        run: clojure -M:integration 
